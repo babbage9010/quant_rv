@@ -7,7 +7,7 @@ library(quantmod)
 library(PerformanceAnalytics)
 
 date_start <- as.Date("2006-07-01")
-date_end <- as.Date("2020-12-31")
+date_end <- as.Date("2019-12-31")
 symbol_bench1  <- "SPY"  # benchmark for comparison
 symbol_signal1 <- "SPY"  # S&P 500 symbol (use SPY or ^GSPC)
 symbol_trade1  <- "SPY"  # ETF to trade
