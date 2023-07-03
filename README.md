@@ -6,6 +6,7 @@ HowTo: the code is written in R, and explained at the blog. In short, install R 
 i'll be blogging along with this at [https://babbage9010.wordpress.com](https://babbage9010.wordpress.com)
 
 ====== July 3 2023 version ======
+
 the goal (as of July 3 2023) is to create a strategy that: 
 1. trades popular, liquid ETFs (to allow it to scale meaningfully) with no extra leverage (no 2x or 3x ETFs)
 2. develops signals based on sensible, logical, statistically meaningful market observations (like realized volatility)
@@ -19,6 +20,7 @@ Note 2 (July 3 2023): the earlier goals were met in the quant_rv 1.1.0 release, 
  [https://babbage9010.wordpress.com/2023/07/03/meeting-goals-setting-higher-goals](https://babbage9010.wordpress.com/2023/07/03/meeting-goals-setting-higher-goals)
 
 ====== June 30 2023 version ======
+
 the goal (as of June 2023) is to create a strategy that: 
 1. develops a signal based on market close values and trades on the next-day Open (easy to trade)
 2. makes sense logically (not based on magic)
