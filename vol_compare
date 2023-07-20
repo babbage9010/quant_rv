@@ -1,0 +1,35 @@
+library(quantmod)
+
+#get the data
+date_start <- as.Date("2006-07-01")
+date_end <- as.Date("2019-12-31")
+symbol_signal1 <- "SPY"  # S&P 500 symbol (use SPY or ^GSPC)
+data_spy <- getSymbols(symbol_signal1, src = "yahoo", from = date_start, to = date_end, auto.assign = FALSE)
+
+#here we calculate vol
+volatility_20d_gkyz <- volatility(data_spy, n=20, calc = "gk.yz")
+volatility_20d_c2c <- volatility(data_spy, n=20, calc = "close")
+
+#for plotting, just the data
+vol_20day_GKYZ = coredata(volatility_20d_gkyz) 
+vol_20day_C2C = coredata(volatility_20d_c2c)
+
+#plot it
+pl1 <- plot.new()
+pl1 <- plot(x=vol_20day_C2C,y=vol_20day_GKYZ, main = "C2C vol vs GKYZ vol")
+pl1 <- abline(reg = lm(vol_20day_GKYZ ~ vol_20day_C2C), col = "red", lwd = 2)
+
+#let's also look at daily returns (vol direction)
+roc_volatility_gkyz <- ROC(volatility_20d_gkyz, n = 1, type = "continuous")
+roc_volatility_c2c <- ROC(volatility_20d_c2c, n = 1, type = "continuous")
+#roc_volatility_gkyz <- SMA(ROC(volatility_20d_gkyz, n = 1, type = "continuous"), n = 40)
+#roc_volatility_c2c <- SMA(ROC(volatility_20d_c2c, n = 1, type = "continuous"), n = 40)
+
+#for plotting, just the data
+roc_vol_20day_GKYZ = coredata(roc_volatility_gkyz) 
+roc_vol_20day_C2C = coredata(roc_volatility_c2c)
+
+#plot it
+pl2 <- plot.new()
+pl2 <- plot(x=roc_vol_20day_C2C,y=roc_vol_20day_GKYZ, main = "Daily Returns: C2C vol vs GKYZ vol")
+pl2 <- abline(reg = lm(roc_vol_20day_GKYZ ~ roc_vol_20day_C2C), col = "red", lwd = 2)
