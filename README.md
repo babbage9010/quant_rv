@@ -3,7 +3,7 @@ quant_rv is a quantitative ETF trading strategy based on realized volatility, wr
 
 HowTo: the code is written in R, and explained at the blog. In short, install R Studio, download/save these R files to your computer and load them into R Studio and "source" them. The first time you may need to "install" a couple libraries (the error messages should help with that). More explicit beginner instructions someday, but it's pretty easy.
 
-i'll be blogging along with this at [https://babbage9010.wordpress.com](https://babbage9010.wordpress.com)
+i'll be blogging along with this at [https://babbage9010.wordpress.com](https://babbage9010.wordpress.com) Code releases are separate R scripts that tie into the blog posts.
 
 ====== July 3 2023 version ======
 
