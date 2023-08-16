@@ -55,15 +55,18 @@ datcore <- coredata(dat)
 pl1 <- plot(x=datcore[,2],y=datcore[,1], sub="daily data, 2006/07/01 to 2019/12/31",main = paste(sep="", vollabel," (x-axis) vs lagged SPY Open returns (y-axis)"))
 pl1 <- abline(reg = lm(datcore[,1] ~ datcore[,2]), col = "red", lwd = 2)
 
+# Set for four graphs, or seven including 3 mean daily SPY returns plots
+numrows <- 4 #either 2 or 4 please
 # Set up 2x2 graphical window
-par(mfrow = c(2, 2))
-# Set up 4x2 graphical window
-#par(mfrow = c(4, 2))
+par(mfrow = c(numrows, 2))
 
 # Recreate all four/seven plots
 pl1 <- plot(x=datcore[,2],y=datcore[,1], sub=paste(sep="","daily data, ",start_date," to ",end_date),main = paste(sep="", vollabel," (x-axis) vs lagged SPY Open returns (y-axis)"))
 pl1 <- abline(reg = lm(datcore[,1] ~ datcore[,2]), col = "red", lwd = 2)
 
+if(numrows == 4){
+  pl2 <- plot.new()
+}
 #helper function
 winpc <- function(vec){ sum(vec > 0) / sum(vec != 0) }
 
@@ -90,8 +93,8 @@ for(q in 1:3){
     #print( paste("decile",i,"mean:",means[i],"vol range:",lowval,"-",hival) )
   }
   barplot(means,xlab=xlabel,ylab="SPY mean daily return",main="Mean daily SPY returns per volatility bucket",sub="low vol on left, high vol on right")
-  #uncomment the next two lines for a 4x2 plot with daily win %
-  #barplot(wins,xlab=xlabel,ylab="SPY mean daily return",main="Daily win % for SPY returns per vol bucket",sub="low vol on left, high vol on right")
-  #abline(h=c(0.54),col="red")
-  
+  if(numrows == 4){
+    barplot(wins,xlab=xlabel,ylab="SPY mean daily return",main="Daily win % for SPY returns per vol bucket",sub="low vol on left, high vol on right")
+    abline(h=c(0.54),col="red")
+  }
 }
