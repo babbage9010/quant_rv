@@ -80,7 +80,6 @@ for(q in 1:3){
   #loop through volatility buckets to get mean returns
   means <- c()
   wins <- c()
-  losses <- c()
   for(i in 1:qnum){
     # datx = data segment from x_dat[,1] (returns) to summarize
     lowbound <- ifelse(i == 1, decsmin, decs[i-1])
@@ -89,7 +88,6 @@ for(q in 1:3){
     datx <- na.omit(datx)
     means[i] <- mean(datx)
     wins[i] <- winpc(datx)
-    losses[i] <- losspc(datx)
     #print( paste("decile",i,"mean:",means[i],"vol range:",lowval,"-",hival) )
   }
   barplot(means,xlab=xlabel,ylab="SPY mean daily return",main="Mean daily SPY returns per volatility bucket",sub="low vol on left, high vol on right")
