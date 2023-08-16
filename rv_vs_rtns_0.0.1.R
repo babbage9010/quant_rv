@@ -1,8 +1,7 @@
 ### rv_vs_rtns_0.0.1.R by babbage9010 and friends
 # initial release
 # this code is really weak, I barely knew what I was doing when I 
-# started, probably ridiculous list of lists then convert to matrix
-# but it's my start.
+# started, but it's my start.
 ### released under MIT License
 
 # Step 1: Load libraries and data
