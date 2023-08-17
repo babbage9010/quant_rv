@@ -40,6 +40,7 @@ x_dat  <- rv20; x_dat_label = "C2C"
 vollabel = paste(x_dat_label," ",lookbk, "d vol",sep="")
 
 #y - SPY open lagged returns
+roc_trade1 <- ROC(trade_prices, n = 1, type = "discrete")
 returns_spy_open <- roc_trade1 
 returns_spy_open <- stats::lag(returns_spy_open, 2)
 y_dat <- returns_spy_open
