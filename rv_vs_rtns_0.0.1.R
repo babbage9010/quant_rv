@@ -1,4 +1,5 @@
 ### rv_vs_rtns_0.0.1.R by babbage9010 and friends
+# CORRECTED CODE BELOW (see #COMMENT blocks)
 # initial release
 # this code is really weak, I barely knew what I was doing when I 
 # started, but it's my start.
@@ -42,7 +43,18 @@ vollabel = paste(x_dat_label," ",lookbk, "d vol",sep="")
 #y - SPY open lagged returns
 roc_trade1 <- ROC(trade_prices, n = 1, type = "discrete")
 returns_spy_open <- roc_trade1 
-returns_spy_open <- stats::lag(returns_spy_open, 2)
+#CORRECTION: lag here was used incorrectly
+#NO! ORIGINAL LINE:  returns_spy_open <- stats::lag(returns_spy_open, 2)
+returns_spy_open <- stats::lag(returns_spy_open, -2)
+# We normally use a two-day lag(x,2) on a signal to match it properly with Open-Open 
+#  returns from two days in the future, corresponding to reading a signal after a Close
+#  then trading as needed on the following Open (ie, in the morning for this case).
+#  BUT I accidentally applied the same +2 open to align the RETURNS to the volatility
+#  measures here. This pushes the returns forward two days instead of pushing the signal
+#  forward... meaning the signal was aligning with an Open-Open return from two days 
+#  previous, giving us an unrealistically gorgeous correlation and low vol anomaly.
+#  Run it yourself to see that now it looks pretty close to random with this setup.
+#  More exploration to come. 
 y_dat <- returns_spy_open
 
 #rid of NAs to even up the data (tip: this avoids NA-related errors)
