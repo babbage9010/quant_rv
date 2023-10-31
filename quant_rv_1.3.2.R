@@ -7,6 +7,7 @@
 # 4: add normalized ATR functionality, add to strategy signals
 # 5: revision: see #lookback periods randomized; using four lookback ranges
 #   offering complete coverage from 4-25 days, instead of three formerly
+# 6: minor changes to symbol naming/loading code
 
 # Step 1: Load necessary libraries and data
 library(quantmod)
@@ -14,19 +15,26 @@ library(PerformanceAnalytics)
 
 date_start <- as.Date("2006-07-01")
 date_end <- as.Date("2019-12-31")
-symbol_bench1  <- "SPY"  # benchmark for comparison
+symbol_benchmark1  <- "SPY"  # benchmark for comparison
 symbol_signal1 <- "SPY"  # S&P 500 symbol (use SPY or ^GSPC)
 symbol_trade1  <- "SPY"  # ETF to trade
 
-data_spy <- getSymbols(symbol_bench1, src = "yahoo", from = date_start, to = date_end, auto.assign = FALSE)
-prices_benchmark <- Ad(data_spy) #SPY ETF, Adjusted(Ad) for the benchmark
-prices_signal1 <- Ad(data_spy) #SPY ETF, Adjusted(Ad) for the signal (realized vol)
-prices_trade1 <- Op(data_spy) #SPY data, Open(Op) for our trading
-pricesCl <- Cl(data_spy) #SPY ETF, Close(Cl) for the ATR normalization
+data_benchmark1 <- getSymbols(symbol_benchmark1, src = "yahoo", from = date_start, to = date_end, auto.assign = FALSE)
+#data_signal1 <- getSymbols(symbol_signal1, src = "yahoo", from = date_start, to = date_end, auto.assign = FALSE)
+#data_trade1 <- getSymbols(symbol_trade1, src = "yahoo", from = date_start, to = date_end, auto.assign = FALSE)
+data_signal1 <- data_benchmark1 #do this if only using "SPY", e.g., to avoid extra downloading
+data_trade1 <- data_benchmark1
+data_benchmark2 <- data_benchmark1
+prices_benchmark1 <- Ad(data_benchmark1) #Adjusted(Ad) for the #1 benchmark
+prices_benchmark2 <- Op(data_benchmark2) #Open(Op) for the #2 benchmark
+prices_signal1 <- Ad(data_signal1) #Adjusted(Ad) for the signal (realized vol)
+prices_trade1 <- Op(data_trade1) #Open(Op) for our trading
+prices_signal1Cl <- Cl(data_signal1) #Close(Cl) for the ATR normalization
 
 # Step 2: Calculate ROC series
 roc_signal1 <-   ROC(prices_signal1, n = 1, type = "discrete")
-roc_benchmark <- ROC(prices_benchmark, n = 1, type = "discrete")
+roc_benchmark1 <- ROC(prices_benchmark1, n = 1, type = "discrete")
+roc_benchmark2 <- ROC(prices_benchmark2, n = 1, type = "discrete")
 roc_trade1 <-    ROC(prices_trade1, n = 1, type = "discrete")
 
 # Step 3: Develop the trading strategies
@@ -40,31 +48,31 @@ lookback_short <- floor(runif(5, min = 4, max = 8))
 
 #calculate all five volatility measures across 4 lookback ranges (12)
 #cc: Close-to-Close volatility
-vol_cc_L <- volatility(data_spy, n = lookback_long[1], calc = "close")
-vol_cc_ML <- volatility(data_spy, n = lookback_medlong[1], calc = "close")
-vol_cc_MS <- volatility(data_spy, n = lookback_medshort[1], calc = "close")
-vol_cc_S <- volatility(data_spy, n = lookback_short[1], calc = "close")
+vol_cc_L <- volatility(data_signal1, n = lookback_long[1], calc = "close")
+vol_cc_ML <- volatility(data_signal1, n = lookback_medlong[1], calc = "close")
+vol_cc_MS <- volatility(data_signal1, n = lookback_medshort[1], calc = "close")
+vol_cc_S <- volatility(data_signal1, n = lookback_short[1], calc = "close")
 #rs: Rogers-Satchell volatility
-vol_rs_L <- volatility(data_spy, n = lookback_long[2], calc = "rogers.satchell")
-vol_rs_ML <- volatility(data_spy, n = lookback_medlong[2], calc = "rogers.satchell")
-vol_rs_MS <- volatility(data_spy, n = lookback_medshort[2], calc = "rogers.satchell")
-vol_rs_S <- volatility(data_spy, n = lookback_short[2], calc = "rogers.satchell")
+vol_rs_L <- volatility(data_signal1, n = lookback_long[2], calc = "rogers.satchell")
+vol_rs_ML <- volatility(data_signal1, n = lookback_medlong[2], calc = "rogers.satchell")
+vol_rs_MS <- volatility(data_signal1, n = lookback_medshort[2], calc = "rogers.satchell")
+vol_rs_S <- volatility(data_signal1, n = lookback_short[2], calc = "rogers.satchell")
 #p: Parkinson volatility
-vol_p_L <- volatility(data_spy, n = lookback_long[3], calc = "parkinson")
-vol_p_ML <- volatility(data_spy, n = lookback_medlong[3], calc = "parkinson")
-vol_p_MS <- volatility(data_spy, n = lookback_medshort[3], calc = "parkinson")
-vol_p_S <- volatility(data_spy, n = lookback_short[3], calc = "parkinson")
+vol_p_L <- volatility(data_signal1, n = lookback_long[3], calc = "parkinson")
+vol_p_ML <- volatility(data_signal1, n = lookback_medlong[3], calc = "parkinson")
+vol_p_MS <- volatility(data_signal1, n = lookback_medshort[3], calc = "parkinson")
+vol_p_S <- volatility(data_signal1, n = lookback_short[3], calc = "parkinson")
 #gkyz: Garman-Klass Yang-Zhang volatility
-vol_gkyz_L <- volatility(data_spy, n = lookback_long[4], calc = "gk.yz")
-vol_gkyz_ML <- volatility(data_spy, n = lookback_medlong[4], calc = "gk.yz")
-vol_gkyz_MS <- volatility(data_spy, n = lookback_medshort[4], calc = "gk.yz")
-vol_gkyz_S <- volatility(data_spy, n = lookback_short[4], calc = "gk.yz")
+vol_gkyz_L <- volatility(data_signal1, n = lookback_long[4], calc = "gk.yz")
+vol_gkyz_ML <- volatility(data_signal1, n = lookback_medlong[4], calc = "gk.yz")
+vol_gkyz_MS <- volatility(data_signal1, n = lookback_medshort[4], calc = "gk.yz")
+vol_gkyz_S <- volatility(data_signal1, n = lookback_short[4], calc = "gk.yz")
 
 #natr: normalized Average True Range volatility
-natr_L <- ATR(data_spy, n=lookback_long[5], maType="ZLEMA")[ , "atr"] / pricesCl
-natr_ML <- ATR(data_spy, n=lookback_medlong[5], maType="ZLEMA")[ , "atr"] / pricesCl
-natr_MS <- ATR(data_spy, n=lookback_medshort[5], maType="ZLEMA")[ , "atr"] / pricesCl
-natr_S <- ATR(data_spy, n=lookback_short[5], maType="ZLEMA")[ , "atr"] / pricesCl
+natr_L <- ATR(data_signal1, n=lookback_long[5], maType="ZLEMA")[ , "atr"] / prices_signal1Cl
+natr_ML <- ATR(data_signal1, n=lookback_medlong[5], maType="ZLEMA")[ , "atr"] / prices_signal1Cl
+natr_MS <- ATR(data_signal1, n=lookback_medshort[5], maType="ZLEMA")[ , "atr"] / prices_signal1Cl
+natr_S <- ATR(data_signal1, n=lookback_short[5], maType="ZLEMA")[ , "atr"] / prices_signal1Cl
 
 #strategy volatility thresholds, randomized
 vthresh <- runif(16, min = 0.12, max = 0.17) #low threshold for volatility measures
@@ -143,10 +151,10 @@ returns_strategy3 <- roc_trade1 * stats::lag(signal_3, 2)
 returns_strategy3 <- na.omit(returns_strategy3)
 
 # Calculate Benchmark 1&2 returns
-returns_benchmark1 <- stats::lag(roc_benchmark, 0) 
+returns_benchmark1 <- stats::lag(roc_benchmark1, 0) 
 returns_benchmark1 <- na.omit(returns_benchmark1)
 label_benchmark1 <- "Benchmark SPY total return"
-returns_benchmark2 <- stats::lag(roc_trade1, 0)
+returns_benchmark2 <- stats::lag(roc_benchmark2, 0)
 returns_benchmark2 <- na.omit(returns_benchmark2)
 label_benchmark2 <- "Benchmark 2: SPY Open-Open, no divvies"
 
@@ -179,31 +187,31 @@ for(s in 1:20){
   
   #calculate all five volatility measures across 4 lookback ranges (12)
   #cc: Close-to-Close volatility
-  vol_cc_L <- volatility(data_spy, n = lookback_long[1], calc = "close")
-  vol_cc_ML <- volatility(data_spy, n = lookback_medlong[1], calc = "close")
-  vol_cc_MS <- volatility(data_spy, n = lookback_medshort[1], calc = "close")
-  vol_cc_S <- volatility(data_spy, n = lookback_short[1], calc = "close")
+  vol_cc_L <- volatility(data_signal1, n = lookback_long[1], calc = "close")
+  vol_cc_ML <- volatility(data_signal1, n = lookback_medlong[1], calc = "close")
+  vol_cc_MS <- volatility(data_signal1, n = lookback_medshort[1], calc = "close")
+  vol_cc_S <- volatility(data_signal1, n = lookback_short[1], calc = "close")
   #rs: Rogers-Satchell volatility
-  vol_rs_L <- volatility(data_spy, n = lookback_long[2], calc = "rogers.satchell")
-  vol_rs_ML <- volatility(data_spy, n = lookback_medlong[2], calc = "rogers.satchell")
-  vol_rs_MS <- volatility(data_spy, n = lookback_medshort[2], calc = "rogers.satchell")
-  vol_rs_S <- volatility(data_spy, n = lookback_short[2], calc = "rogers.satchell")
+  vol_rs_L <- volatility(data_signal1, n = lookback_long[2], calc = "rogers.satchell")
+  vol_rs_ML <- volatility(data_signal1, n = lookback_medlong[2], calc = "rogers.satchell")
+  vol_rs_MS <- volatility(data_signal1, n = lookback_medshort[2], calc = "rogers.satchell")
+  vol_rs_S <- volatility(data_signal1, n = lookback_short[2], calc = "rogers.satchell")
   #p: Parkinson volatility
-  vol_p_L <- volatility(data_spy, n = lookback_long[3], calc = "parkinson")
-  vol_p_ML <- volatility(data_spy, n = lookback_medlong[3], calc = "parkinson")
-  vol_p_MS <- volatility(data_spy, n = lookback_medshort[3], calc = "parkinson")
-  vol_p_S <- volatility(data_spy, n = lookback_short[3], calc = "parkinson")
+  vol_p_L <- volatility(data_signal1, n = lookback_long[3], calc = "parkinson")
+  vol_p_ML <- volatility(data_signal1, n = lookback_medlong[3], calc = "parkinson")
+  vol_p_MS <- volatility(data_signal1, n = lookback_medshort[3], calc = "parkinson")
+  vol_p_S <- volatility(data_signal1, n = lookback_short[3], calc = "parkinson")
   #gkyz: Garman-Klass Yang-Zhang volatility
-  vol_gkyz_L <- volatility(data_spy, n = lookback_long[4], calc = "gk.yz")
-  vol_gkyz_ML <- volatility(data_spy, n = lookback_medlong[4], calc = "gk.yz")
-  vol_gkyz_MS <- volatility(data_spy, n = lookback_medshort[4], calc = "gk.yz")
-  vol_gkyz_S <- volatility(data_spy, n = lookback_short[4], calc = "gk.yz")
+  vol_gkyz_L <- volatility(data_signal1, n = lookback_long[4], calc = "gk.yz")
+  vol_gkyz_ML <- volatility(data_signal1, n = lookback_medlong[4], calc = "gk.yz")
+  vol_gkyz_MS <- volatility(data_signal1, n = lookback_medshort[4], calc = "gk.yz")
+  vol_gkyz_S <- volatility(data_signal1, n = lookback_short[4], calc = "gk.yz")
   
   #natr: normalized Average True Range volatility
-  natr_L <- ATR(data_spy, n=lookback_long[5], maType="ZLEMA")[ , "atr"] / pricesCl
-  natr_ML <- ATR(data_spy, n=lookback_medlong[5], maType="ZLEMA")[ , "atr"] / pricesCl
-  natr_MS <- ATR(data_spy, n=lookback_medshort[5], maType="ZLEMA")[ , "atr"] / pricesCl
-  natr_S <- ATR(data_spy, n=lookback_short[5], maType="ZLEMA")[ , "atr"] / pricesCl
+  natr_L <- ATR(data_signal1, n=lookback_long[5], maType="ZLEMA")[ , "atr"] / prices_signal1Cl
+  natr_ML <- ATR(data_signal1, n=lookback_medlong[5], maType="ZLEMA")[ , "atr"] / prices_signal1Cl
+  natr_MS <- ATR(data_signal1, n=lookback_medshort[5], maType="ZLEMA")[ , "atr"] / prices_signal1Cl
+  natr_S <- ATR(data_signal1, n=lookback_short[5], maType="ZLEMA")[ , "atr"] / prices_signal1Cl
   
   #strategy volatility thresholds, randomized
   vthresh <- runif(16, min = 0.12, max = 0.17) #low threshold for volatility measures
