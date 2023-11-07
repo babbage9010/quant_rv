@@ -6,6 +6,7 @@ HowTo: the code is written in R, and explained at the blog. In short, install R 
 i am blogging along with this at [https://babbage9010.wordpress.com](https://babbage9010.wordpress.com) Code releases are separate R scripts that tie into the blog posts. so far i've kept it up for about 10 posts in two months, and starting to get somewhere interesting
 
 ====== November 2 2023 version ======
+
 quant_rv_1.3.3 consistently beats SPY total return by investing in SPY or SH depending on the daily signal. It meets all the goals set out for the July 3 version (below). It has not been shown to meet the stretch goal (#7 below) but that may show up in future posts as it is further explored. Also to be explored... testing with market data from before and after the in-sampe test period (July 2006 to December 2019).
 
 ====== July 3 2023 version ======
