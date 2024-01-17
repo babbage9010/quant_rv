@@ -24,13 +24,11 @@ symbol_trade2  <- "SPY"  # -1x ETF to trade. in real life use SH
 reloadall <- FALSE | !exists("data_benchmark1")  
 if(reloadall){
   data_benchmark1 <- getSymbols(symbol_benchmark1, src = "yahoo", from = date_start, to = date_end, auto.assign = FALSE)
-  #data_signal1 <- getSymbols(symbol_signal1, src = "yahoo", from = date_start, to = date_end, auto.assign = FALSE)
+  data_signal1 <- getSymbols(symbol_signal1, src = "yahoo", from = date_start, to = date_end, auto.assign = FALSE)
+  data_trade1 <- getSymbols(symbol_trade1, src = "yahoo", from = date_start, to = date_end, auto.assign = FALSE)
   data_trade2 <- getSymbols(symbol_trade2, src = "yahoo", from = date_start, to = date_end, auto.assign = FALSE)
-  data_signal1 <- data_benchmark1 #do this if only using "SPY", e.g., to avoid extra downloading
-  data_trade1 <- data_benchmark1
-  data_benchmark2 <- data_benchmark1
   prices_benchmark1 <- Ad(data_benchmark1) #Adjusted(Ad) for the #1 benchmark
-  prices_benchmark2 <- Op(data_benchmark2) #Open(Op) for the #2 benchmark
+  prices_benchmark2 <- Op(data_benchmark1) #Open(Op) for the #2 benchmark
   prices_signal1 <- Ad(data_signal1) #Adjusted(Ad) for the signal (realized vol)
   prices_trade1 <- Op(data_trade1) #Open(Op) for our trading
   prices_trade2 <- Op(data_trade2) #Open(Op) for our trading
@@ -228,7 +226,7 @@ label_strategy1 <- "Strategy 1: MV5 original (20 sigs, thr == 1)"
 
 # try setting thr2 higher when using more signals
 # e.g. try ~90-110 for all 4070 signals, ~30-60 for 2000 sigs, ~10-15 for 500, etc 
-thr2 <- floor(runif(1,min=90,max=110))  #random signal thr from range
+thr2 <- 100 #floor(runif(1,min=90,max=110))  #random signal thr from range
 signal_2 <- ifelse(allvol >= thr2, 1, 0) #allvol uses all the vol signals
 #signal_2 <- ifelse(selvol >= thr2, 1, 0) #selvol uses subset of vol sigs
 signal_2[is.na(signal_2)] <- 0
