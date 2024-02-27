@@ -3,7 +3,11 @@ quant_rv is a quantitative ETF trading strategy based on realized volatility, wr
 
 HowTo: the code is written in R, and explained at the blog. In short, install R Studio, download/save these R files to your computer and load them into R Studio and "source" them. The first time you may need to "install" a couple libraries (the error messages should help with that). More explicit beginner instructions someday, but it's pretty easy.
 
-i am blogging along with this at [https://babbage9010.wordpress.com](https://babbage9010.wordpress.com) Code releases are separate R scripts that tie into the blog posts. so far i've kept it up for about 10 posts in two months, and starting to get somewhere interesting
+i am blogging along with this at [https://babbage9010.wordpress.com](https://babbage9010.wordpress.com) Code releases are separate R scripts that tie into the blog posts. so far i've kept it up for about 17 posts in eight months, and starting to get somewhere interesting
+
+====== Feb 2024 versions ======
+
+quant_rv_2.0.0 met my goals for beating SPY total return in real and risk-adjusted returns by investing in SPY or SH depending on the daily signal. I stopped further dev on quant_rv there for now. My latest contribution, qrvx, takes two long and one short legs from quant_rv and combines them into a strategy with a negative correlation to SPY, making it suitable for combining in 60/40 fashion with SPY to get even better risk-adjusted returns than before.
 
 ====== November 2 2023 version ======
 
