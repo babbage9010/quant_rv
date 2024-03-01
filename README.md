@@ -9,7 +9,7 @@ i am blogging along with this at [https://babbage9010.wordpress.com](https://bab
 
 quant_rv_2.0.0 met my goals for beating SPY total return in real and risk-adjusted returns by investing in SPY or SH depending on the daily signal. I stopped further dev on quant_rv there for now. My latest contribution, qrvx, takes two long and one short legs from quant_rv and combines them into a strategy with a negative correlation to SPY, making it suitable for combining in 60/40 fashion with SPY to get even better risk-adjusted returns than before.
 
-qrvx_2.0.0 is a subset of quant_rv specifically crafted to have a very low to negative correlation with SPY. You can read [https://babbage9010.wordpress.com/2024/02/26/replacing-the-40-with-qrvx-in-r/](the blog post about it here).
+qrvx_2.0.0 is a subset of quant_rv specifically crafted to have a very low to negative correlation with SPY. You can read [the blog post about it here](https://babbage9010.wordpress.com/2024/02/26/replacing-the-40-with-qrvx-in-r/).
 
 ====== November 2 2023 version ======
 
